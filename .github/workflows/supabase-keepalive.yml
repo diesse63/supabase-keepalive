@@ -2,7 +2,7 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    - cron: "0 6 * * 1"   # ogni lunedì alle 06:00 UTC
+    - cron: "0 6 * * 1,4"   # ogni lunedì e giovedì alle 06:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -12,7 +12,19 @@ jobs:
     steps:
       - name: Ping Supabase project
         run: |
-          curl -s "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1" \
+          echo "🚀 Pinging Supabase project..."
+          
+          RESPONSE=$(curl -s "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1" \
             -H "apikey: ${SUPABASE_ANON_KEY}" \
-            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}"
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+          
+          echo "📥 Response from Supabase:"
+          echo "$RESPONSE"
+          
+          if [ -z "$RESPONSE" ] || [[ "$RESPONSE" == *"error"* ]]; then
+            echo "❌ Ping failed or returned error"
+            exit 1
+          else
+            echo "✅ Ping successful"
+
 
