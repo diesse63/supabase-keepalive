@@ -3,7 +3,7 @@ name: Supabase Keep Alive
 on:
   schedule:
     - cron: "0 6 * * 1"   # ogni lunedì alle 06:00 UTC
-  workflow_dispatch:       # permette avvio manuale
+  workflow_dispatch:
 
 jobs:
   ping:
@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Ping Supabase project
         run: |
-          curl -s "${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?select=id&limit=1" \
+          curl -s "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1" \
             -H "apikey: ${SUPABASE_ANON_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_ANON_KEY}"
+
