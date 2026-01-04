@@ -1,4 +1,4 @@
-name: Supabase Keep Alive Official
+ name: Supabase Keep Alive Official
 
 on:
   schedule:
@@ -20,6 +20,12 @@ jobs:
           fi
           
           echo "🚀 Inviando ping a Supabase..."
-          curl -i -X GET "$SUPABASE_URL/rest/v1/Tracce?select=id&limit=1" \
+          # Usiamo --fail per far sì che curl restituisca un errore se lo stato non è 200
+          curl --fail -i -X GET "$SUPABASE_URL/rest/v1/Tracce?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY"
+
+      - name: Notifica in caso di fallimento
+        if: failure()
+        run: |
+          echo "Il ping a Supabase è fallito! Controlla i log e i segreti del repository."
