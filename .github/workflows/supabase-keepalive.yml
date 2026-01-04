@@ -12,4 +12,10 @@ jobs:
       - name: Ping Supabase project
         env:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: echo "🚀 Pinging Supabase project..." && curl -i -H "apikey: ${SUPABASE_ANON_KEY}" -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1"
+        run: |
+          echo "🚀 Pinging Supabase project..."
+          curl -s -o /dev/null -w "HTTP status: %{http_code}\n" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1"
+
