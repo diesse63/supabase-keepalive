@@ -1,4 +1,4 @@
- name: Supabase Keep Alive
+name: Supabase Keep Alive
 
 on:
   schedule:
@@ -11,18 +11,17 @@ jobs:
     steps:
       - name: Ping Supabase project
         env:
-          # Questo blocco collega i tuoi Secrets alle variabili del comando
+          # QUESTA SEZIONE È QUELLA CHE MANCAVA O ERA SBAGLIATA
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         run: |
           echo "🚀 Avvio ping a Supabase..."
           
-          # Controllo di sicurezza: se la variabile è vuota, il comando fallirà con errore rosso
           if [ -z "$SUPABASE_URL" ]; then
-            echo "❌ ERRORE: SUPABASE_URL non trovata nei Secrets!"
+            echo "❌ ERRORE: La variabile SUPABASE_URL è vuota. Controlla i Secrets!"
             exit 1
           fi
 
-          curl -i -X GET "$SUPABASE_URL/rest/v1/Tracce?select=id&limit=1" \
+          curl -i -s -X GET "$SUPABASE_URL/rest/v1/Tracce?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY"
