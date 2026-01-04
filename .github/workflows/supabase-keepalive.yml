@@ -11,14 +11,13 @@ jobs:
     steps:
       - name: Ping Supabase project
         env:
-          # QUESTA SEZIONE È QUELLA CHE MANCAVA O ERA SBAGLIATA
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         run: |
           echo "🚀 Avvio ping a Supabase..."
           
           if [ -z "$SUPABASE_URL" ]; then
-            echo "❌ ERRORE: La variabile SUPABASE_URL è vuota. Controlla i Secrets!"
+            echo "❌ ERRORE CRITICO: I Secrets non sono configurati correttamente su GitHub!"
             exit 1
           fi
 
