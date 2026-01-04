@@ -2,8 +2,8 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    - cron: "0 6 * * 1,4"
-  workflow_dispatch:
+    - cron: "0 6 * * 1,4" # Lunedì e Giovedì alle 06:00
+  workflow_dispatch: # Permette l'avvio manuale per test
 
 jobs:
   ping:
@@ -11,11 +11,12 @@ jobs:
     steps:
       - name: Ping Supabase project
         env:
+          # Assicurati che questi nomi corrispondano ESATTAMENTE ai Secrets su GitHub
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         run: |
           echo "🚀 Pinging Supabase project..."
-          curl -s -o /dev/null -w "HTTP status: %{http_code}\n" \
+          # Usiamo le variabili d'ambiente caricate sopra
+          curl -i -X GET "$SUPABASE_URL/rest/v1/Tracce?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            "https://afdbrcywdooycvipzovs.supabase.co/rest/v1/Tracce?select=id&limit=1"
-
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY"
